@@ -21,9 +21,27 @@ run_subfinder(){
 				
 }
 
-subdomains_collection(){
+run_assetfinder(){
 	domain=$1
+	if [[ ! $(command -v assetfinder) ]]; then
+		if ask_choice "assetfinder"; then
+			sudo apt install assetfinder
+			[ "$?" -eq 0 ] && echo "Installation finished" && run_assetfinder "$domain"
+		fi
+	else
+		assetfinder -subs-only "$domain" > result_assetfinder.txt
+	fi
+}
+
+subdomains_collection(){
+	read -p "Enter domain => " domain
 	run_subfinder $domain
+	run_assetfinder $domain
 	
 }
 
+main(){
+	subdomains_collection
+}
+
+main
