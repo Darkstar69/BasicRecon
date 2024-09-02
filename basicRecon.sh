@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+exit_script(){
+	read -p "\nSure want to exit (y/n) ? => " input
+	if [[ "$input" == "y" ]] || [[ "$input" == "Y" ]]; then
+		echo "Cleaning up...."
+		exit 0
+	else
+		continue
+	fi
+}
+
 ask_choice(){
 	read -p "Install $1 (y/n) => " choice
 	if [[ "$choice" == "y" ]] || [[ "$choice" == "Y" ]]; then
@@ -59,7 +69,11 @@ subdomains_collection(){
 }
 
 main(){
-	subdomains_collection
+	while true;
+	do
+		subdomains_collection
+		sleep 1		
+	done
 }
 
 main
