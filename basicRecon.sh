@@ -10,13 +10,14 @@ ask_choice(){
 }
 
 run_subfinder(){
+	domain=$1
 	if [[ ! $(command -v subfinder) ]]; then
 		if ask_choice "subfinder"; then
 			go install -v github.com/projectdiscovery/subfinder/v2/cmd/subfinder@latest
-			[ "$?" -eq 0 ] && echo "Installation finished"
+			[ "$?" -eq 0 ] && echo "Installation finished" && run_subfinder "$domain"
 		fi
 	else
-		subfinder -d "$1" -o result_subfinder.txt
+		subfinder -d "$domain" -o result_subfinder.txt
 	fi
 				
 }
@@ -33,10 +34,27 @@ run_assetfinder(){
 	fi
 }
 
+
+run_sublist3r(){
+	domain=$1
+	if [[ ! $(command -v sublist3r) ]]; then
+		if ask_choice "sublist3r"; then
+			sudo apt install sublist3r
+			[ "$?" -eq 0 ] && echo "Installation finished" && run_sublist3r "$domain"
+		fi
+	else
+		sublist3r -d "$domain" -o result_sublist3r.txt
+	fi
+
+}
+
+
+
 subdomains_collection(){
 	read -p "Enter domain => " domain
-	run_subfinder $domain
-	run_assetfinder $domain
+#	run_subfinder $domain
+#	run_assetfinder $domain
+#	run_sublist3r $domain
 	
 }
 
