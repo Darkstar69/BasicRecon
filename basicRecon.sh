@@ -61,19 +61,28 @@ run_sublist3r(){
 
 
 subdomains_collection(){
-	read -p "Enter domain => " domain
-#	run_subfinder $domain
-#	run_assetfinder $domain
-#	run_sublist3r $domain
+	domain=$1
+	echo "Subdomain enumerating...."
+	sleep 2
+	run_subfinder $domain
+	run_assetfinder $domain
+	run_sublist3r $domain
 	
 }
 
-main(){
-	while true;
-	do
-		subdomains_collection
-		sleep 1		
-	done
+print_usage(){
+	printf "Usage : $0 -d domain.com\n"
 }
 
-main
+
+[ "$#" -le 0 ] && print_usage && exit 1
+while true;
+do
+	case "$1" in
+		'-d' | '--domain')
+			domain=$2
+			subdomains_collection $domain
+			sleep 1	
+	esac	
+done
+
